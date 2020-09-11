@@ -38,7 +38,6 @@ const getRecords = async page => {
 const parseTotalRecords = records => {
   const $ = cheerio.load(records);
   const resultsHeader = $('#results-header').text();
-  console.log(resultsHeader);
   return parseInt(resultsHeader.split('of')[1].trim().replace(',', ''))
 }
 

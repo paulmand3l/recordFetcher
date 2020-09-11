@@ -21,20 +21,21 @@ const processRequest = async request => {
   try {
     result = await axios.get(request.url, { headers: { Cookie } });
   } catch (e) {
-    console.log("xxx", request.url);
     if (e.response  && e.response.status) {
       const code = e.response.status;
-      console.log("  Status", code);
+      console.log(`xxx (${code} ${e.response.statusText}) ${request.url}`);
       if (400 <= code && code <= 499) {
         request.reject(e);
       } else {
-        console.log("  Retrying...")
+        console.log("  Retrying", request.url);
         request.resolve(queueRequest(request.url));
       }
     }
+
+    return;
   }
 
-  console.log("<--", request.url);
+  console.log(`<-- (${result.status} ${result.statusText}) ${request.url}`);
 
   requestDurations.push(Date.now() - start);
   if (requestDurations.length > maxRequestDurations) requestDurations.shift();
