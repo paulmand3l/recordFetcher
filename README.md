@@ -4,7 +4,9 @@ This is to help grab records from Ancestry.com databases
 
 # How do I use it?
 
-Copy the main search URL and associated cookies into options.js and run index.js
+1. Copy the main search URL into url.txt
+2. Copy cookies into cookies.txt
+3. `node index.js`
 
 # Main Search URL?
 

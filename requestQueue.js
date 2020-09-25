@@ -1,12 +1,13 @@
+const fs = require('fs');
 const _ = require('lodash');
 const axios = require('axios');
 const { formatSeconds } = require('./utils.js');
-const { Cookie } = require('./options.js');
 
 // Settings
 const maxParallelRequests = 5;
 const maxRequestDurations = 100;
 
+const Cookie = fs.readFileSync('./cookie.txt');
 
 const queue = [];
 let nRequests = 0;
@@ -30,6 +31,8 @@ const processRequest = async request => {
         console.log("  Retrying", request.url);
         request.resolve(queueRequest(request.url));
       }
+    } else {
+      console.log(e);
     }
 
     return;
