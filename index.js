@@ -27,7 +27,14 @@ const getRecordUrl = (rid, pid, dbid) => ('https://search.ancestry.com/Mercury/P
 
 const getRecords = async pageUrl => {
   const result = await request(pageUrl);
-  return result.data;
+  const html = result.data;
+
+  const $ = cheerio.load(html);
+  if ($('.navSubscribeLink').length) {
+    throw new Error("Logged out. Please refresh cookies");
+  }
+
+  return html;
 }
 
 const parseTotalRecords = records => {
@@ -87,6 +94,8 @@ const saveRecord = (record, contents) => {
   const data = {};
   const $fields = $('.hoverDataWrapper > table > tbody > tr');
 
+  console.log("Parsing", $fields.length, "fields");
+
   for (let i = 0; i < $fields.length; i++) {
     const $field = $fields.eq(i);
     const key = $field.children('td').eq(0).text().replace(':', '');
@@ -112,8 +121,6 @@ const processCurrentPage = async () => {
   } catch (e) {
     console.log("Problem with url in", currentPageFile, currentPageUrl, e);
   }
-
-  console.log("Downloading page", currentPageUrl);
 
   const result = await getRecords(currentPageUrl);
   const records = parseRecords(result);

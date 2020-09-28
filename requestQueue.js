@@ -7,7 +7,7 @@ const { formatSeconds } = require('./utils.js');
 const maxParallelRequests = 5;
 const maxRequestDurations = 100;
 
-const Cookie = fs.readFileSync('./cookie.txt');
+const Cookie = fs.readFileSync('./cookie.txt', { encoding: 'utf8' }).trim();
 
 const queue = [];
 let nRequests = 0;
